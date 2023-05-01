@@ -1048,8 +1048,25 @@ def _ensure_cwd_is_workspace_root():
     # Although this can fail (OSError/FileNotFoundError/PermissionError/NotADirectoryError), there's no easy way to recover, so we'll happily crash.
     os.chdir(workspace_root)
 
+def _write_compile_commands(compile_command_entries: typing.List[str]):
+    file_name = 'compile_commands.json'
+    try:
+        # orjson is much faster than the standard library's json module (1.9 seconds vs 6.6 seconds for a ~140 MB file).
+        from orjson import dumps
+        with open(file_name, 'wb') as output_file:
+            output_file.write(dumps(
+                compile_command_entries,
+            ))
+    except ImportError:
+        with open(file_name, 'w') as output_file:
+            json.dump(
+                compile_command_entries,
+                output_file,
+                indent=2, # Yay, human readability!
+                check_circular=False # For speed.
+            )
 
-if __name__ == '__main__':
+def main():
     _ensure_cwd_is_workspace_root()
     _ensure_gitignore_entries_exist()
     _ensure_external_workspaces_link_exists()
@@ -1069,11 +1086,7 @@ if __name__ == '__main__':
     There should be actionable warnings, above, that led to this.""")
         sys.exit(1)
 
-    # Chain output into compile_commands.json
-    with open('compile_commands.json', 'w') as output_file:
-        json.dump(
-            compile_command_entries,
-            output_file,
-            indent=2, # Yay, human readability!
-            check_circular=False # For speed.
-        )
+    _write_compile_commands(compile_command_entries)
+
+if __name__ == '__main__':
+    main()
