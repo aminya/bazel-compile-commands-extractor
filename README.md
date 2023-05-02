@@ -65,6 +65,8 @@ load("@hedron_compile_commands//:workspace_setup.bzl", "hedron_compile_commands_
 hedron_compile_commands_setup()
 ```
 
+This rule optionally uses the `orjson` pip package to significantly speed up JSON processing. You can install it via `pip install orjson -U`.
+
 #### Suggestion: Updates
 
 Improvements come frequently, so we'd recommend keeping up-to-date.
