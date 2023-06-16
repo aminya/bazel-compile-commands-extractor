@@ -52,11 +52,11 @@ refresh_compile_commands(
 ```
 """
 
-
 ########################################
 # Implementation
 
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@rules_python//python:defs.bzl", "py_binary")
 
 def refresh_compile_commands(
         name,
@@ -80,7 +80,7 @@ def refresh_compile_commands(
     # Generate runnable python script from template
     script_name = name + ".py"
     _expand_template(name = script_name, labels_to_flags = targets, exclude_headers = exclude_headers, exclude_external_sources = exclude_external_sources, **kwargs)
-    native.py_binary(name = name, srcs = [script_name], **kwargs)
+    py_binary(name = name, srcs = [script_name], deps = ["@pip_orjson//:pkg"], **kwargs)
 
 def _expand_template_impl(ctx):
     """Inject targets of interest into refresh.template.py, and set it up to be run."""
