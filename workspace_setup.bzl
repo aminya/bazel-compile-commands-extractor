@@ -1,4 +1,8 @@
+"""Workspace setup macros."""
+
 # Do not change the filename; it is part of the user interface.
+
+load("//:python_requirements_lock.bzl", install_python_deps = "install_deps")
 
 def hedron_compile_commands_setup():
     """Set up a WORKSPACE to have hedron_compile_commands used within it."""
@@ -7,7 +11,4 @@ def hedron_compile_commands_setup():
     # See invocations in:
     #     README.md (for users)
     #     WORKSPACE (for working on this repo standalone)
-
-    # Currently nothing to do -> no-op.
-    # So why is this even here? Enables future expansion (e.g to add transitive dependencies) without changing the user interface.
-    pass
+    install_python_deps()
