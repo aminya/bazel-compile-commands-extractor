@@ -65,7 +65,11 @@ load("@hedron_compile_commands//:workspace_setup.bzl", "hedron_compile_commands_
 hedron_compile_commands_setup()
 ```
 
-This rule optionally uses the `orjson` pip package to significantly speed up JSON processing. You can install it via `pip install orjson -U`.
+This rule optionally uses the `orjson` pip package to significantly speed up JSON processing. You can add this before running the refresh command to ensure orjson availability:
+
+```shell
+pip show orjson >/dev/null || pip install orjson --user
+```
 
 #### Suggestion: Updates
 
